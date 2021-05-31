@@ -13,7 +13,6 @@ function getRandomIntegerNumber(min, max) {
     min = 0;
   }
   const rand = Math.round(Math.random() * (max - min) + min);
-  console.log(rand);
   return rand;
 }
 
@@ -23,7 +22,6 @@ function getRandomFractionalNumber(min, max, quantityCharAfterComma) {
     min = 0;
   }
   const rand = (Math.random() * (max - min) + min).toFixed(quantityCharAfterComma);
-  console.log(rand);
   return rand;
 }
 
