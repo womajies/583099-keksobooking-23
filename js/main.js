@@ -162,6 +162,7 @@ const createOffer = () => ({
   price: getRandomArrayElement(PRICE),
   type: getRandomArrayElement(TYPE),
   rooms: getRandomArrayElement(ROOMS),
+  guests: getRandomArrayElement(GUESTS),
   checkin: getRandomArrayElement(CHECKIN),
   checkout: getRandomArrayElement(CHECKOUT),
   features: getRandomArrayString(FEATURES),
@@ -174,6 +175,7 @@ const createLocation = () => ({
   lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
 });
 
-const similarAuthors = new Array(SIMILAR_AUTHOR_COUNT).fill(null).map(() => createAuthor());
-const similarOffer = new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
-const similarLocation = new Array(SIMILAR_LOCATION_COUNT).fill(null).map(() => createLocation());
+new Array(SIMILAR_AUTHOR_COUNT).fill(null).map(() => createAuthor());
+new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
+new Array(SIMILAR_LOCATION_COUNT).fill(null).map(() => createLocation());
+
