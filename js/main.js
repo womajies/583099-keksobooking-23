@@ -130,9 +130,7 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const SIMILAR_AUTHOR_COUNT = 10;
-const SIMILAR_OFFER_COUNT = 10;
-const SIMILAR_LOCATION_COUNT = 10;
+const SIMILAR_OBJECTS_COUNT = 10;
 
 const getRandomArrayElement = (elements) => elements[getRandomIntegerNumber(0, elements.length - 1)];
 
@@ -151,37 +149,31 @@ const getRandomArrayString = (array) => {
   }
   return tempAmount;
 };
-
-const createAuthor = () => ({
-  avatar: getRandomArrayElement(AVATAR),
-});
-
-const createOffer = () => ({
-  title: getRandomArrayElement(TITLE),
-  address: getRandomArrayElement(ADDRESS),
-  price: getRandomArrayElement(PRICE),
-  type: getRandomArrayElement(TYPE),
-  rooms: getRandomArrayElement(ROOMS),
-  guests: getRandomArrayElement(GUESTS),
-  checkin: getRandomArrayElement(CHECKIN),
-  checkout: getRandomArrayElement(CHECKOUT),
-  features: getRandomArrayString(FEATURES),
-  description: getRandomArrayElement(DESCRIPTION),
-  photos: getRandomArrayString(PHOTOS),
-});
-
-const createLocation = () => ({
-  lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
-  lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
+const objectGeneration = () => ({
+  author: {
+    avatar: getRandomArrayElement(AVATAR),
+  },
+  offer: {
+    title: getRandomArrayElement(TITLE),
+    address: getRandomArrayElement(ADDRESS),
+    price: getRandomArrayElement(PRICE),
+    type: getRandomArrayElement(TYPE),
+    rooms: getRandomArrayElement(ROOMS),
+    guests: getRandomArrayElement(GUESTS),
+    checkin: getRandomArrayElement(CHECKIN),
+    checkout: getRandomArrayElement(CHECKOUT),
+    features: getRandomArrayString(FEATURES),
+    description: getRandomArrayElement(DESCRIPTION),
+    photos: getRandomArrayString(PHOTOS),
+  },
+  location: {
+    lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
+    lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
+  },
 });
 
 function createObjects() {
-  const createObjectsArray = [];
-  const similarAuthor = new Array(SIMILAR_AUTHOR_COUNT).fill(null).map(() => createAuthor());
-  const similarOffer = new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
-  const similarLocation = new Array(SIMILAR_LOCATION_COUNT).fill(null).map(() => createLocation());
-  createObjectsArray.push(similarLocation, similarOffer, similarAuthor);
-  return createObjectsArray;
+  return new Array(SIMILAR_OBJECTS_COUNT).fill(null).map(() => objectGeneration());
 }
 
 createObjects();
