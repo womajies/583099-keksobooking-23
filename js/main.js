@@ -175,7 +175,13 @@ const createLocation = () => ({
   lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
 });
 
-new Array(SIMILAR_AUTHOR_COUNT).fill(null).map(() => createAuthor());
-new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
-new Array(SIMILAR_LOCATION_COUNT).fill(null).map(() => createLocation());
+function createObjects() {
+  const createObjectsArray = [];
+  const similarAuthor = new Array(SIMILAR_AUTHOR_COUNT).fill(null).map(() => createAuthor());
+  const similarOffer = new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
+  const similarLocation = new Array(SIMILAR_LOCATION_COUNT).fill(null).map(() => createLocation());
+  createObjectsArray.push(similarLocation, similarOffer, similarAuthor);
+  return createObjectsArray;
+}
 
+createObjects();
