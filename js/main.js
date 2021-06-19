@@ -149,27 +149,33 @@ const getRandomArrayString = (array) => {
   }
   return tempAmount;
 };
+const createAuthor = () => ({
+  avatar: getRandomArrayElement(AVATAR),
+});
+
+const createOffer = () => ({
+  title: getRandomArrayElement(TITLE),
+  address: getRandomArrayElement(ADDRESS),
+  price: getRandomArrayElement(PRICE),
+  type: getRandomArrayElement(TYPE),
+  rooms: getRandomArrayElement(ROOMS),
+  guests: getRandomArrayElement(GUESTS),
+  checkin: getRandomArrayElement(CHECKIN),
+  checkout: getRandomArrayElement(CHECKOUT),
+  features: getRandomArrayString(FEATURES),
+  description: getRandomArrayElement(DESCRIPTION),
+  photos: getRandomArrayString(PHOTOS),
+});
+
+const createLocation = () => ({
+  lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
+  lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
+});
+
 const objectGeneration = () => ({
-  author: {
-    avatar: getRandomArrayElement(AVATAR),
-  },
-  offer: {
-    title: getRandomArrayElement(TITLE),
-    address: getRandomArrayElement(ADDRESS),
-    price: getRandomArrayElement(PRICE),
-    type: getRandomArrayElement(TYPE),
-    rooms: getRandomArrayElement(ROOMS),
-    guests: getRandomArrayElement(GUESTS),
-    checkin: getRandomArrayElement(CHECKIN),
-    checkout: getRandomArrayElement(CHECKOUT),
-    features: getRandomArrayString(FEATURES),
-    description: getRandomArrayElement(DESCRIPTION),
-    photos: getRandomArrayString(PHOTOS),
-  },
-  location: {
-    lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
-    lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
-  },
+  author: createAuthor(),
+  offer: createOffer(),
+  location: createLocation(),
 });
 
 function createObjects() {
