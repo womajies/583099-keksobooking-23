@@ -108,7 +108,6 @@ const SIMILAR_OBJECTS_COUNT = 10;
 
 const getRandomArrayElement = (elements) => elements[getRandomIntegerNumber(0, elements.length - 1)];
 
-let tempAmount = [];
 const getRandomArrayString = (array) => {
   let getRandomMinValue = getRandomIntegerNumber(0, array.length - 1);
   let getRandomMaxValue = getRandomIntegerNumber(0, array.length - 1);
@@ -117,33 +116,39 @@ const getRandomArrayString = (array) => {
     getRandomMinValue = getRandomMaxValue;
     getRandomMaxValue = tempValue;
   }
-  tempAmount = [];
+  const tempAmount = [];
   for (let index = getRandomMinValue; index <= getRandomMaxValue; index++) {
     tempAmount.push(array[index]);
   }
   return tempAmount;
 };
+const createAuthor = () => ({
+  avatar: getRandomArrayElement(AVATAR),
+});
+
+const createOffer = () => ({
+  title: getRandomArrayElement(TITLE),
+  address: getRandomArrayElement(ADDRESS),
+  price: getRandomArrayElement(PRICE),
+  type: getRandomArrayElement(TYPE),
+  rooms: getRandomArrayElement(ROOMS),
+  guests: getRandomArrayElement(GUESTS),
+  checkin: getRandomArrayElement(CHECKIN),
+  checkout: getRandomArrayElement(CHECKOUT),
+  features: getRandomArrayString(FEATURES),
+  description: getRandomArrayElement(DESCRIPTION),
+  photos: getRandomArrayString(PHOTOS),
+});
+
+const createLocation = () => ({
+  lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
+  lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
+});
+
 const objectGeneration = () => ({
-  author: {
-    avatar: getRandomArrayElement(AVATAR),
-  },
-  offer: {
-    title: getRandomArrayElement(TITLE),
-    address: getRandomArrayElement(ADDRESS),
-    price: getRandomArrayElement(PRICE),
-    type: getRandomArrayElement(TYPE),
-    rooms: getRandomArrayElement(ROOMS),
-    guests: getRandomArrayElement(GUESTS),
-    checkin: getRandomArrayElement(CHECKIN),
-    checkout: getRandomArrayElement(CHECKOUT),
-    features: getRandomArrayString(FEATURES),
-    description: getRandomArrayElement(DESCRIPTION),
-    photos: getRandomArrayString(PHOTOS),
-  },
-  location: {
-    lat: getRandomFractionalNumber(35.65000, 35.70000, 5),
-    lng: getRandomFractionalNumber(139.70000, 139.80000, 5),
-  },
+  author: createAuthor(),
+  offer: createOffer(),
+  location: createLocation(),
 });
 
 export function createObjects() {
