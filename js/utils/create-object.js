@@ -1,5 +1,5 @@
-import {getRandomFractionalNumber} from './get-random-fractional-number';
-import {getRandomIntegerNumber} from './get-random-integer-number';
+import {getRandomFractionalNumber} from './get-random-fractional-number.js';
+import {getRandomIntegerNumber} from './get-random-integer-number.js';
 
 const AVATAR = [
   'img/avatars/user01.png',
