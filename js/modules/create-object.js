@@ -1,5 +1,5 @@
-import {getRandomFractionalNumber} from './get-random-fractional-number.js';
-import {getRandomIntegerNumber} from './get-random-integer-number.js';
+import {getRandomFractionalNumber} from '../utils/get-random-fractional-number.js';
+import {getRandomIntegerNumber} from '../utils/get-random-integer-number.js';
 
 const AVATAR = [
   'img/avatars/user01.png',
@@ -117,8 +117,8 @@ const getRandomArrayString = (array) => {
     getRandomMaxValue = tempValue;
   }
   const tempAmount = [];
-  for (let index = getRandomMinValue; index <= getRandomMaxValue; index++) {
-    tempAmount.push(array[index]);
+  for (let i = getRandomMinValue; i <= getRandomMaxValue; i++) {
+    tempAmount.push(array[i]);
   }
   return tempAmount;
 };
@@ -151,6 +151,8 @@ const objectGeneration = () => ({
   location: createLocation(),
 });
 
-export function createObjects() {
+function createObjects() {
   return new Array(SIMILAR_OBJECTS_COUNT).fill(null).map(() => objectGeneration());
 }
+
+export {createObjects};
