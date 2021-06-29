@@ -123,7 +123,6 @@ const similarAds = () => {
   const resultCreateAdCardFragment = createAdCardFragment(createObjects());
 
   mapCanvas.appendChild(resultCreateAdCardFragment);
-  console.log(mapCanvas);
   return mapCanvas;
 };
 
