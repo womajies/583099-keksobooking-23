@@ -151,8 +151,12 @@ const objectGeneration = () => ({
   location: createLocation(),
 });
 
+function createObject() {
+  return objectGeneration();
+}
+
 function createObjects() {
   return new Array(SIMILAR_OBJECTS_COUNT).fill(null).map(() => objectGeneration());
 }
 
-export {createObjects};
+export {createObjects, createObject};
