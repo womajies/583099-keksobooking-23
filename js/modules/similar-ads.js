@@ -1,6 +1,4 @@
-import {createObject, createObjects} from './create-object.js';
-
-const mapCanvas = document.querySelector('#map-canvas');
+import {createObject} from './create-object.js';
 
 const isEmpty = (selector, property) => {
   if(property === undefined) {
@@ -11,20 +9,11 @@ const isEmpty = (selector, property) => {
   }
 };
 
-const dataChecking = (obj) => {
+const dataSwitching = (obj) => {
   const templateFragment = document.querySelector('#card').content;
   const template = templateFragment.querySelector('.popup');
   const ad = template.cloneNode(true);
-  const adTextTime = ad.querySelector('.popup__text--time');
-  const adAvatar = ad.querySelector('.popup__avatar');
   const adType = ad.querySelector('.popup__type');
-  const adTextCapacity = ad.querySelector('.popup__text--capacity');
-
-  if(obj.offer.type === undefined) {
-    adType.classList.add('hidden');
-  } else {
-    adType.classList.remove('hidden');
-  }
 
   switch(obj.offer.type) {
     case 'flat':
@@ -42,6 +31,22 @@ const dataChecking = (obj) => {
     case 'hotel':
       adType.textContent = 'Отель';
       break;
+  }
+};
+
+const dataChecking = (obj) => {
+  const templateFragment = document.querySelector('#card').content;
+  const template = templateFragment.querySelector('.popup');
+  const ad = template.cloneNode(true);
+  const adTextTime = ad.querySelector('.popup__text--time');
+  const adType = ad.querySelector('.popup__type');
+  const adAvatar = ad.querySelector('.popup__avatar');
+  const adTextCapacity = ad.querySelector('.popup__text--capacity');
+
+  if(obj.offer.type === undefined) {
+    adType.classList.add('hidden');
+  } else {
+    adType.classList.remove('hidden');
   }
 
   if(obj.offer.rooms === undefined || obj.offer.guests === undefined) {
@@ -84,6 +89,7 @@ const createAdElement = (object) => {
   isEmpty(adTextAdress, object.offer.address);
   isEmpty(adTextPrice, object.offer.price);
   adTextPrice.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
+  dataSwitching(object);
   dataChecking(object);
 
   adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
@@ -131,12 +137,4 @@ const createAdsFragment = (objects) => {
   return fragment;
 };
 
-function createAd() {
-  return mapCanvas.appendChild(createAdElement(createObject()));
-}
-
-function createAds() {
-  return mapCanvas.appendChild(createAdsFragment(createObjects()));
-}
-
-export {createAd, createAds};
+export {createAdElement, createAdsFragment};

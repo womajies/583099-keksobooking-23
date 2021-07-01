@@ -159,4 +159,4 @@ function createObjects() {
   return new Array(SIMILAR_OBJECTS_COUNT).fill(null).map(() => objectGeneration());
 }
 
-export {createObjects, createObject};
+export {createObject, createObjects};
