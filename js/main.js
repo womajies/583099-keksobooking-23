@@ -1,7 +1,11 @@
-import {getRandomFractionalNumber} from './utils/get-random-fractional-number';
-import {getRandomIntegerNumber} from './utils/get-random-integer-number';
-import {createObjects} from './utils/create-object';
+import {createObject, createObjects} from './modules/create-object.js';
+import {createAdElement, createAdsFragment} from './modules/similar-ads.js';
 
-getRandomIntegerNumber(10, 1);
-getRandomFractionalNumber(10, 1, 5);
-createObjects();
+const mapCanvas = document.querySelector('#map-canvas');
+const object = createObject();
+const objects = createObjects();
+const ad = createAdElement(object);
+const adsFragment = createAdsFragment(objects);
+
+mapCanvas.appendChild(ad);
+mapCanvas.appendChild(adsFragment);
