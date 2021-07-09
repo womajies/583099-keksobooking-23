@@ -1,6 +1,6 @@
 import {createObject, createObjects} from './modules/create-object.js';
 import {createAdElement, createAdsFragment} from './modules/similar-ads.js';
-import {validateForm} from './modules/validate-form.js';
+import {validateForm, disabledForm, enabledForm} from './modules/form.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 const object = createObject();
@@ -11,3 +11,5 @@ const adsFragment = createAdsFragment(objects);
 mapCanvas.appendChild(ad);
 mapCanvas.appendChild(adsFragment);
 validateForm();
+disabledForm();
+enabledForm();
