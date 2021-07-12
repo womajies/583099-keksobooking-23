@@ -24,8 +24,7 @@ const disabledForm = () => {
   const adForm = document.querySelector('.ad-form');
   const adFormFields = adForm.querySelectorAll('fieldset');
   const mapFilter = document.querySelector('.map__filters');
-  const mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
-  const mapFilterCheckbox = mapFilter.querySelectorAll('.map__checkbox');
+  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
 
   adForm.classList.add('ad-form--disabled');
   mapFilter.classList.add('ad-form--disabled');
@@ -33,8 +32,7 @@ const disabledForm = () => {
     el.disabled = true;
   });
 
-  const mapFilters = mapFilterSelects.concat(mapFilterCheckbox);
-  mapFilters.forEach((el) => {
+  mapFilterElems.forEach((el) => {
     el.disabled = true;
   });
 };
@@ -43,8 +41,7 @@ const enabledForm = () => {
   const adForm = document.querySelector('.ad-form');
   const adFormFields = adForm.querySelectorAll('fieldset');
   const mapFilter = document.querySelector('.map__filters');
-  const mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
-  const mapFilterCheckbox = mapFilter.querySelectorAll('.map__checkbox');
+  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
 
   adForm.classList.remove('ad-form--disabled');
   mapFilter.classList.remove('ad-form--disabled');
@@ -52,8 +49,7 @@ const enabledForm = () => {
     el.disabled = false;
   });
 
-  const mapFilters = mapFilterSelects.concat(mapFilterCheckbox);
-  mapFilters.forEach((el) => {
+  mapFilterElems.forEach((el) => {
     el.disabled = false;
   });
 };
