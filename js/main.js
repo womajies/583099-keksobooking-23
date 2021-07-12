@@ -12,4 +12,4 @@ mapCanvas.appendChild(ad);
 mapCanvas.appendChild(adsFragment);
 validateForm();
 disabledForm();
-enabledForm();
+// enabledForm();
