@@ -1,6 +1,4 @@
 import {disabledCapacity, whichCapacity, whichType} from '../utils/which-selects.js';
-import {mergeCollectionIntoOne} from '../utils/merge-collection-into-one.js';
-
 
 const validateForm = () => {
   const adForm = document.querySelector('.ad-form');
@@ -35,7 +33,7 @@ const disabledForm = () => {
     el.disabled = true;
   });
 
-  const mapFilters = mergeCollectionIntoOne(mapFilterSelects, mapFilterCheckbox);
+  const mapFilters = mapFilterSelects.concat(mapFilterCheckbox);
   mapFilters.forEach((el) => {
     el.disabled = true;
   });
@@ -54,7 +52,7 @@ const enabledForm = () => {
     el.disabled = false;
   });
 
-  const mapFilters = mergeCollectionIntoOne(mapFilterSelects, mapFilterCheckbox);
+  const mapFilters = mapFilterSelects.concat(mapFilterCheckbox);
   mapFilters.forEach((el) => {
     el.disabled = false;
   });
