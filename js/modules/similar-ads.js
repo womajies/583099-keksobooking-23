@@ -23,33 +23,39 @@ const createAdElement = (object) => {
 
   adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
   adTextTime.textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
-  const modifiers = object.offer.features.map((feature) => `popup__feature--${feature}`);
-  ad.querySelectorAll('.popup__feature').forEach((el) => {
-    const modifier = el.classList[1];
-    if(!modifiers.includes(modifier)) {
-      el.remove();
-    }
-  });
+
+  if(object.offer.features === undefined) {
+    ad.querySelector('.popup__features').classList.add('hidden');
+  } else {
+    ad.querySelector('.popup__features').classList.remove('hidden');
+    const modifiers = object.offer.features.map((feature) => `popup__feature--${feature}`);
+    ad.querySelectorAll('.popup__feature').forEach((el) => {
+      const modifier = el.classList[1];
+      if(!modifiers.includes(modifier)) {
+        el.remove();
+      }
+    });
+  }
 
   isEmpty(adDescr, object.offer.description);
   const adPhotosList = ad.querySelector('.popup__photos');
   const photosFragment = document.createDocumentFragment();
 
-  object.offer.photos.forEach((el) => {
-    if(el === undefined) {
-      adPhotosList.classList.add('hidden');
-    } else {
-      adPhotosList.classList.remove('hidden');
-    }
-    adPhotosList.textContent = '';
-    const adPhoto = document.createElement('img');
-    adPhoto.src = el;
-    adPhoto.classList.add('popup__photo');
-    adPhoto.width = '45';
-    adPhoto.height = '40';
-    adPhoto.alt = 'Фотография жилья';
-    photosFragment.appendChild(adPhoto);
-  });
+  if(object.offer.photos === undefined) {
+    adPhotosList.classList.add('hidden');
+  } else {
+    adPhotosList.classList.remove('hidden');
+    object.offer.photos.forEach((el) => {
+      adPhotosList.textContent = '';
+      const adPhoto = document.createElement('img');
+      adPhoto.src = el;
+      adPhoto.classList.add('popup__photo');
+      adPhoto.width = '45';
+      adPhoto.height = '40';
+      adPhoto.alt = 'Фотография жилья';
+      photosFragment.appendChild(adPhoto);
+    });
+  }
 
   adPhotosList.appendChild(photosFragment);
 

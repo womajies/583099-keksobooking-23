@@ -26,12 +26,6 @@ const dataChecking = (obj) => {
     adTextTime.classList.remove('hidden');
   }
 
-  if(ad.querySelectorAll('.popup__feature').length === 0) {
-    ad.querySelector('.popup__features').classList.add('hidden');
-  } else {
-    ad.querySelector('.popup__features').classList.remove('hidden');
-  }
-
   if(obj.author.avatar === undefined) {
     adAvatar.classList.add('hidden');
   } else {
