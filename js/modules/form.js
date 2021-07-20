@@ -1,4 +1,6 @@
 import {disabledCapacity, whichCapacity, whichType} from '../utils/which-selects.js';
+import {sendData} from '../modules/api.js';
+import {showErrorMsg} from '../utils/error-msg.js';
 
 const validateForm = () => {
   const adForm = document.querySelector('.ad-form');
@@ -54,4 +56,20 @@ const enabledForm = () => {
   });
 };
 
-export {validateForm, disabledForm, enabledForm};
+const setAdFormSubmit = (onSuccess) => {
+  const adForm = document.querySelector('.ad-form');
+
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(evt),
+      () => showErrorMsg(),
+      new FormData(evt.target),
+    );
+
+  });
+
+};
+
+export {validateForm, disabledForm, enabledForm, setAdFormSubmit};

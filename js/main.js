@@ -4,3 +4,4 @@ import {mapInit} from './modules/map-init.js';
 validateForm();
 disabledForm();
 mapInit();
+
