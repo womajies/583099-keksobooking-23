@@ -23,11 +23,6 @@ const mapInit = () => {
 
   const map = L
     .map('map-canvas')
-    .on('load', () => {
-      getData();
-      setAdFormSubmit(showSuccessMsg);
-      address.value = 'x: 35.68950, y: 139.69200';
-    })
     .setView({
       lat: 35.68950,
       lng: 139.69200,
@@ -98,14 +93,15 @@ const mapInit = () => {
     iconAnchor: [20, 40],
   });
 
-  let markers = [];
+  // let markers = [];
 
   const renderPins = (array) => {
-    markers.forEach((marker) => {
-      marker.removeFrom(map);
-    });
+    // markers.forEach((marker) => {
+    //   marker.removeFrom(map);
+    // });
 
-    markers = [];
+    // markers = [];
+    markerGroup.clearLayers();
 
     const slicedArray = array.slice(0, 10);
     slicedArray.forEach((elem) => {
@@ -118,11 +114,12 @@ const mapInit = () => {
       {
         icon,
         keepInView: true,
-      })
+      });
+      newMarker
         .addTo(markerGroup)
         .bindPopup(createAdElement(elem));
 
-      markers.push(newMarker);
+      // markers.push(newMarker);
     });
   };
 
@@ -137,6 +134,12 @@ const mapInit = () => {
     showAlert('Не удалось получить данные. Попробуйте позже');
   });
 
+  map.on('load', () => {
+    renderPins(advertisments);
+    setAdFormSubmit(showSuccessMsg);
+    address.value = 'x: 35.68950, y: 139.69200';
+  });
+
   const filterByFeature = (feature, data) => data.filter((adv) => !!(adv.offer.features && adv.offer.features.includes(feature)));
 
   const renderFilterObjects = () => {
@@ -144,52 +147,28 @@ const mapInit = () => {
 
     filterObjects = filterObjects.filter((adv) => adv.offer.type === housingType.value || housingType.value === 'any');
 
-    if (housingPrice.value === 'middle') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 10000 && adv.offer.price <= 50000);
-    }
-
     if (housingPrice.value === 'low') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.price <= 10000);
-    }
-
-    if (housingPrice.value === 'high') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 50000 );
     }
 
     if (housingPrice.value === 'middle') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 10000 && adv.offer.price <= 50000);
     }
 
-    if (housingPrice.value === 'low') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price <= 10000);
-    }
-
     if (housingPrice.value === 'high') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 50000 );
     }
 
-    if (housingRooms.value === '1') {
+    if (housingRooms.value === '1' || housingGuests.value === '1') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 1);
     }
 
-    if (housingRooms.value === '2') {
+    if (housingRooms.value === '2' || housingGuests.value === '2') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 2);
     }
 
-    if (housingRooms.value === '3') {
+    if (housingRooms.value === '3' || housingGuests.value === '3') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 3);
-    }
-
-    if (housingGuests.value === '2') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 2);
-    }
-
-    if (housingGuests.value === '1') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 1);
-    }
-
-    if (housingGuests.value === '0') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 0);
     }
 
     if (wifiInput.checked) {
