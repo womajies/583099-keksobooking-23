@@ -6,7 +6,7 @@ const getData = (onSuccess, onFail) => {
       onSuccess(objects);
     })
     .catch(() => {
-      onFail();
+      onFail;
     });
 };
 

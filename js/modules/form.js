@@ -69,7 +69,6 @@ const setAdFormSubmit = (onSuccess) => {
     );
 
   });
-
 };
 
 export {validateForm, disabledForm, enabledForm, setAdFormSubmit};
