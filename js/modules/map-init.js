@@ -167,7 +167,7 @@ const mapInit = () => {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 2);
     }
 
-    if (housingRooms.value === '3' || housingGuests.value === '3') {
+    if (housingRooms.value === '3' || housingGuests.value === '0') {
       filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 3);
     }
 
