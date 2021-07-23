@@ -1,4 +1,5 @@
 import {onSuccessEscKeydown} from '../utils/is-esc-event.js';
+import {whichType} from '../utils/which-selects.js';
 
 const unshowSuccessMsg = () => {
   const successMsg = document.querySelector('.success');
@@ -16,6 +17,9 @@ const showSuccessMsg = (evt) => {
   const success = successFragment.querySelector('.success');
   const successMsg = success.cloneNode(true);
   const mapFilter = document.querySelector('.map__filters');
+  const adForm = document.querySelector('.ad-form');
+  const adFormType = adForm.querySelector('#type');
+  const adFormPrice = adForm.querySelector('#price');
 
   document.body.insertBefore(successMsg, document.body.lastChild);
   document.addEventListener('keydown', onSuccessEscKeydown);
@@ -24,6 +28,7 @@ const showSuccessMsg = (evt) => {
     e.stopPropagation();
   });
   evt.target.reset();
+  whichType(adFormType, adFormPrice);
   mapFilter.reset();
 };
 

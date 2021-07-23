@@ -8,31 +8,41 @@ const validateForm = () => {
   const adFormCapacity = adForm.querySelector('#capacity');
   const adFormType = adForm.querySelector('#type');
   const adFormPrice = adForm.querySelector('#price');
+  const adFormTimein = adForm.querySelector('#timein');
+  const adFormTimeout = adForm.querySelector('#timeout');
 
   disabledCapacity(adFormCapacity);
   adFormCapacity[2].disabled = false;
 
-  adForm.addEventListener(('change'), (evt) => {
-    if(evt.target.matches('#room_number')) {
-      whichCapacity(adFormRoom, adFormCapacity);
-    }
-    if(evt.target.matches('#type')) {
-      whichType(adFormType, adFormPrice);
-    }
+  adFormRoom.addEventListener(('change'), () => {
+    whichCapacity(adFormRoom, adFormCapacity);
+  });
+  adFormType.addEventListener(('change'), () => {
+    whichType(adFormType, adFormPrice);
+  });
+  adFormTimein.addEventListener(('change'), () => {
+    adFormTimeout.value = adFormTimein.value;
+  });
+  adFormTimeout.addEventListener(('change'), () => {
+    adFormTimein.value = adFormTimeout.value;
   });
 };
 
 const disabledForm = () => {
   const adForm = document.querySelector('.ad-form');
   const adFormFields = adForm.querySelectorAll('fieldset');
-  const mapFilter = document.querySelector('.map__filters');
-  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
 
   adForm.classList.add('ad-form--disabled');
-  mapFilter.classList.add('ad-form--disabled');
   adFormFields.forEach((el) => {
     el.disabled = true;
   });
+};
+
+const disabledFilter = () => {
+  const mapFilter = document.querySelector('.map__filters');
+  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
+
+  mapFilter.classList.add('map__filters--disabled');
 
   mapFilterElems.forEach((el) => {
     el.disabled = true;
@@ -42,15 +52,18 @@ const disabledForm = () => {
 const enabledForm = () => {
   const adForm = document.querySelector('.ad-form');
   const adFormFields = adForm.querySelectorAll('fieldset');
-  const mapFilter = document.querySelector('.map__filters');
-  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
 
   adForm.classList.remove('ad-form--disabled');
-  mapFilter.classList.remove('ad-form--disabled');
   adFormFields.forEach((el) => {
     el.disabled = false;
   });
+};
 
+const enabledFilter = () => {
+  const mapFilter = document.querySelector('.map__filters');
+  const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
+
+  mapFilter.classList.remove('map__filters--disabled');
   mapFilterElems.forEach((el) => {
     el.disabled = false;
   });
@@ -71,4 +84,4 @@ const setAdFormSubmit = (onSuccess) => {
   });
 };
 
-export {validateForm, disabledForm, enabledForm, setAdFormSubmit};
+export {validateForm, disabledForm, disabledFilter, enabledForm, enabledFilter, setAdFormSubmit};

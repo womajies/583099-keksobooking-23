@@ -1,5 +1,5 @@
 import {createAdElement} from './similar-ads.js';
-import {enabledForm, setAdFormSubmit} from '../modules/form.js';
+import {enabledForm, enabledFilter, setAdFormSubmit} from '../modules/form.js';
 import {getData} from '../modules/api.js';
 import {debounce} from '../utils/debounce.js';
 import {showSuccessMsg} from '../utils/success-msg.js';
@@ -23,6 +23,11 @@ const mapInit = () => {
 
   const map = L
     .map('map-canvas')
+    .on('load', () => {
+      address.value = 'x: 35.68950, y: 139.69200';
+      enabledForm();
+      setAdFormSubmit(showSuccessMsg);
+    })
     .setView({
       lat: 35.68950,
       lng: 139.69200,
@@ -58,33 +63,6 @@ const mapInit = () => {
     address.value = `x: ${coordinates.lat.toFixed(5)}, y: ${coordinates.lng.toFixed(5)}`;
   });
 
-  resetButton.addEventListener('click', () => {
-    mainPinMarker.setLatLng({
-      lat: 35.68950,
-      lng: 139.69200,
-    });
-
-    map.setView({
-      lat: 35.68950,
-      lng: 139.69200,
-    }, 14);
-
-    resetForm.reset();
-    mapFilter.reset();
-  });
-
-  resetForm.addEventListener('submit', () => {
-    mainPinMarker.setLatLng({
-      lat: 35.68950,
-      lng: 139.69200,
-    });
-
-    map.setView({
-      lat: 35.68950,
-      lng: 139.69200,
-    }, 14);
-  });
-
   const markerGroup = L.layerGroup().addTo(map);
 
   const icon = L.icon({
@@ -93,14 +71,7 @@ const mapInit = () => {
     iconAnchor: [20, 40],
   });
 
-  // let markers = [];
-
-  const renderPins = (array) => {
-    // markers.forEach((marker) => {
-    //   marker.removeFrom(map);
-    // });
-
-    // markers = [];
+  function renderPins(array) {
     markerGroup.clearLayers();
 
     const slicedArray = array.slice(0, 10);
@@ -118,26 +89,48 @@ const mapInit = () => {
       newMarker
         .addTo(markerGroup)
         .bindPopup(createAdElement(elem));
-
-      // markers.push(newMarker);
     });
-  };
+  }
 
   let advertisments = [];
 
   getData((objects) => {
     advertisments = objects;
+    enabledFilter();
     renderPins(advertisments);
-    enabledForm();
   },
   () => {
     showAlert('Не удалось получить данные. Попробуйте позже');
   });
 
-  map.on('load', () => {
+  resetButton.addEventListener('click', () => {
+    mainPinMarker.setLatLng({
+      lat: 35.68950,
+      lng: 139.69200,
+    });
+
+    map.setView({
+      lat: 35.68950,
+      lng: 139.69200,
+    }, 14);
+
+    resetForm.reset();
+    mapFilter.reset();
     renderPins(advertisments);
-    setAdFormSubmit(showSuccessMsg);
-    address.value = 'x: 35.68950, y: 139.69200';
+  });
+
+  resetForm.addEventListener('submit', () => {
+    mainPinMarker.setLatLng({
+      lat: 35.68950,
+      lng: 139.69200,
+    });
+
+    map.setView({
+      lat: 35.68950,
+      lng: 139.69200,
+    }, 14);
+
+    renderPins(advertisments);
   });
 
   const filterByFeature = (feature, data) => data.filter((adv) => !!(adv.offer.features && adv.offer.features.includes(feature)));
