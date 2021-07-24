@@ -1,6 +1,5 @@
 import {createObject} from './create-object.js';
 import {isEmpty} from '../utils/is-empty.js';
-import {dataSwitching} from '../utils/data-switching.js';
 import {dataChecking} from '../utils/data-checking.js';
 
 const createAdElement = (object) => {
@@ -13,14 +12,22 @@ const createAdElement = (object) => {
   const adTextCapacity = ad.querySelector('.popup__text--capacity');
   const adTextTime = ad.querySelector('.popup__text--time');
   const adDescr = ad.querySelector('.popup__description');
+  const adType = ad.querySelector('.popup__type');
+  const typeCategory = {
+    PALACE: 'Дворец',
+    FLAT: 'Квартира',
+    HOUSE: 'Дом',
+    BUNGALOW: 'Бунгало',
+    HOTEL: 'Отель',
+  };
 
   isEmpty(adTitle, object.offer.title);
   isEmpty(adTextAdress, object.offer.address);
   isEmpty(adTextPrice, object.offer.price);
   adTextPrice.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
-  dataSwitching(object);
   dataChecking(object);
 
+  adType.textContent = typeCategory[object.offer.type.toUpperCase()];
   adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
   adTextTime.textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
 
