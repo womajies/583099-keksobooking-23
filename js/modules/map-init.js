@@ -6,20 +6,22 @@ import {showSuccessMsg} from '../utils/success-msg.js';
 import {showAlert} from '../utils/show-alert.js';
 
 const mapInit = () => {
+  const ANY = 'any';
+  const SIMILAR_AD_COUNT = 10;
+
+  const housingPrice = {
+    low: {start: 0, end: 10000},
+    middle: {start: 10000, end: 50000},
+    high: {start: 50000, end: 1000000},
+  };
   const resetButton = document.querySelector('.ad-form__reset');
   const resetForm = document.querySelector('.ad-form');
   const mapFilter = document.querySelector('.map__filters');
   const address = document.querySelector('#address');
-  const housingType = mapFilter.querySelector('#housing-type');
-  const housingPrice = mapFilter.querySelector('#housing-price');
-  const housingRooms = mapFilter.querySelector('#housing-rooms');
-  const housingGuests = mapFilter.querySelector('#housing-guests');
-  const wifiInput = document.querySelector('[value="wifi"]');
-  const dishwasherInput = document.querySelector('[value="dishwasher"]');
-  const parkingInput = document.querySelector('[value="parking"]');
-  const washerInput = document.querySelector('[value="washer"]');
-  const elevatorInput = document.querySelector('[value="elevator"]');
-  const conditionerInput = document.querySelector('[value="conditioner"]');
+  const housingTypeSelect = mapFilter.querySelector('#housing-type');
+  const housingPriceSelect = mapFilter.querySelector('#housing-price');
+  const housingRoomsSelect = mapFilter.querySelector('#housing-rooms');
+  const housingGuestsSelect = mapFilter.querySelector('#housing-guests');
 
   const map = L
     .map('map-canvas')
@@ -71,11 +73,10 @@ const mapInit = () => {
     iconAnchor: [20, 40],
   });
 
-  function renderPins(array) {
-    markerGroup.clearLayers();
+  const removeLayer = () => markerGroup.clearLayers();
 
-    const slicedArray = array.slice(0, 10);
-    slicedArray.forEach((elem) => {
+  const renderPins = (array) => {
+    array.forEach((elem) => {
       const lat = elem.location.lat;
       const lng = elem.location.lng;
       const newMarker = L.marker({
@@ -90,14 +91,39 @@ const mapInit = () => {
         .addTo(markerGroup)
         .bindPopup(createAdElement(elem));
     });
-  }
+  };
+
+  const filterType = (ad) => housingTypeSelect.value === ANY || ad.offer.type === housingTypeSelect.value;
+  const filterPrice = (ad) => housingPriceSelect.value === ANY || (ad.offer.price >= housingPrice[housingPriceSelect.value].start && ad.offer.price <= housingPrice[housingPriceSelect.value].end);
+  const filterRooms = (ad) => housingRoomsSelect.value === ANY || ad.offer.rooms === Number(housingRoomsSelect.value);
+  const filterGuests = (ad) => housingGuestsSelect.value === ANY || ad.offer.guests === Number(housingGuestsSelect.value);
+
+  const filterFeatures = (ad) => {
+    const checkedFeatures = mapFilter.querySelectorAll('input[name="features"]:checked');
+    if (ad.offer.features) {
+      return Array.from(checkedFeatures).every((feature) => ad.offer.features.includes(feature.value));
+    }
+  };
+
+  const mapFilterChangeHandler = (cb) => {
+    mapFilter.addEventListener('change', debounce(() => {
+      removeLayer();
+      cb();
+    }, 500));
+  };
 
   let advertisments = [];
 
   getData((objects) => {
     advertisments = objects;
+    renderPins(advertisments.slice(0, SIMILAR_AD_COUNT));
     enabledFilter();
-    renderPins(advertisments);
+    mapFilterChangeHandler(() => {
+      renderPins(advertisments
+        .slice()
+        .filter((ad) => (filterType(ad) && filterRooms(ad) && filterGuests(ad) && filterPrice(ad) && filterFeatures(ad)))
+        .slice(0, SIMILAR_AD_COUNT));
+    });
   },
   () => {
     showAlert('Не удалось получить данные. Попробуйте позже');
@@ -132,79 +158,6 @@ const mapInit = () => {
 
     renderPins(advertisments);
   });
-
-  const filterByFeature = (feature, data) => data.filter((adv) => !!(adv.offer.features && adv.offer.features.includes(feature)));
-
-  const renderFilterObjects = () => {
-    let filterObjects = advertisments;
-
-    filterObjects = filterObjects.filter((adv) => adv.offer.type === housingType.value || housingType.value === 'any');
-
-    if (housingPrice.value === 'low') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price <= 10000);
-    }
-
-    if (housingPrice.value === 'middle') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 10000 && adv.offer.price <= 50000);
-    }
-
-    if (housingPrice.value === 'high') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.price >= 50000 );
-    }
-
-    if (housingRooms.value === '1' || housingGuests.value === '1') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 1);
-    }
-
-    if (housingRooms.value === '2' || housingGuests.value === '2') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 2);
-    }
-
-    if (housingRooms.value === '3' || housingGuests.value === '0') {
-      filterObjects = filterObjects.filter((adv) =>  adv.offer.rooms === 3);
-    }
-
-    if (wifiInput.checked) {
-      filterObjects = filterByFeature('wifi', filterObjects);
-    }
-
-    if (dishwasherInput.checked) {
-      filterObjects = filterByFeature('dishwasher', filterObjects);
-    }
-
-    if (parkingInput.checked) {
-      filterObjects = filterByFeature('parking', filterObjects);
-    }
-
-    if (washerInput.checked) {
-      filterObjects = filterByFeature('washer', filterObjects);
-    }
-
-    if (conditionerInput.checked) {
-      filterObjects = filterByFeature('conditioner', filterObjects);
-    }
-
-    if (elevatorInput.checked) {
-      filterObjects = filterByFeature('elevator', filterObjects);
-    }
-
-    renderPins(filterObjects);
-  };
-
-  const onChange = (input) => {
-    input.addEventListener('change', debounce(renderFilterObjects, 500));
-  };
-
-  onChange(housingType);
-  onChange(housingPrice);
-  onChange(housingRooms);
-  onChange(housingGuests);
-  onChange(wifiInput);
-  onChange(dishwasherInput);
-  onChange(parkingInput);
-  onChange(washerInput);
-  onChange(conditionerInput);
-  onChange(elevatorInput);
 };
 
 export {mapInit};
