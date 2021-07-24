@@ -43,7 +43,6 @@ const disabledFilter = () => {
   const mapFilterElems = mapFilter.querySelectorAll('.map__filter, .map__checkbox');
 
   mapFilter.classList.add('map__filters--disabled');
-
   mapFilterElems.forEach((el) => {
     el.disabled = true;
   });
