@@ -7,6 +7,7 @@ const createAdElement = (object) => {
   const template = templateFragment.querySelector('.popup');
   const ad = template.cloneNode(true);
   const adTitle = ad.querySelector('.popup__title');
+  const adAvatar = ad.querySelector('.popup__avatar');
   const adTextAdress = ad.querySelector('.popup__text--address');
   const adTextPrice = ad.querySelector('.popup__text--price');
   const adTextCapacity = ad.querySelector('.popup__text--capacity');
@@ -27,6 +28,7 @@ const createAdElement = (object) => {
   adTextPrice.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
   dataChecking(object);
 
+  adAvatar.src = object.author.avatar;
   adType.textContent = typeCategory[object.offer.type.toUpperCase()];
   adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
   adTextTime.textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;

@@ -26,13 +26,13 @@ const mapInit = () => {
   const map = L
     .map('map-canvas')
     .on('load', () => {
-      address.value = 'x: 35.68950, y: 139.69200';
+      address.value = 'x: 35.68171, y: 139.75389';
       enabledForm();
       setAdFormSubmit(showSuccessMsg);
     })
     .setView({
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     }, 14);
 
   L.tileLayer(
@@ -50,8 +50,8 @@ const mapInit = () => {
 
   const mainPinMarker = L.marker(
     {
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     },
     {
       draggable: true,
@@ -131,32 +131,32 @@ const mapInit = () => {
 
   resetButton.addEventListener('click', () => {
     mainPinMarker.setLatLng({
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     });
 
     map.setView({
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     }, 14);
 
     resetForm.reset();
     mapFilter.reset();
-    renderPins(advertisments);
+    renderPins(advertisments.slice(0, SIMILAR_AD_COUNT));
   });
 
   resetForm.addEventListener('submit', () => {
     mainPinMarker.setLatLng({
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     });
 
     map.setView({
-      lat: 35.68950,
-      lng: 139.69200,
+      lat: 35.68171,
+      lng: 139.75389,
     }, 14);
 
-    renderPins(advertisments);
+    renderPins(advertisments.slice(0, SIMILAR_AD_COUNT));
   });
 };
 
