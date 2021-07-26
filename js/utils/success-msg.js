@@ -1,18 +1,18 @@
 import {onSuccessEscKeydown} from '../utils/is-esc-event.js';
-import {whichType} from '../utils/which-selects.js';
+import {getType} from './get-selects.js';
 
-const unshowSuccessMsg = () => {
+const formSuccessEscapeMsg = () => {
   const successMsg = document.querySelector('.success');
 
   document.body.removeChild(successMsg);
   document.removeEventListener('keydown', onSuccessEscKeydown);
-  document.querySelector('body').removeEventListener('click', unshowSuccessMsg);
+  document.querySelector('body').removeEventListener('click', formSuccessEscapeMsg);
   successMsg.querySelector('.success__message').removeEventListener('click', (e) => {
     e.stopPropagation();
   });
 };
 
-const showSuccessMsg = (evt) => {
+const formSuccessMsg = (evt) => {
   const successFragment = document.querySelector('#success').content;
   const success = successFragment.querySelector('.success');
   const successMsg = success.cloneNode(true);
@@ -23,14 +23,11 @@ const showSuccessMsg = (evt) => {
 
   document.body.insertBefore(successMsg, document.body.lastChild);
   document.addEventListener('keydown', onSuccessEscKeydown);
-  document.querySelector('body').addEventListener('click', unshowSuccessMsg);
-  document.querySelector('.success__message').addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
+  document.querySelector('body').addEventListener('click', formSuccessEscapeMsg);
   evt.target.reset();
-  whichType(adFormType, adFormPrice);
   mapFilter.reset();
+  getType(adFormType, adFormPrice);
 };
 
 
-export {showSuccessMsg, unshowSuccessMsg};
+export {formSuccessMsg, formSuccessEscapeMsg};

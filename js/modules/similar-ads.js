@@ -1,6 +1,4 @@
-import {createObject} from './create-object.js';
 import {isEmpty} from '../utils/is-empty.js';
-import {dataChecking} from '../utils/data-checking.js';
 
 const createAdElement = (object) => {
   const templateFragment = document.querySelector('#card').content;
@@ -24,24 +22,52 @@ const createAdElement = (object) => {
 
   isEmpty(adTitle, object.offer.title);
   isEmpty(adTextAdress, object.offer.address);
-  isEmpty(adTextPrice, object.offer.price);
-  adTextPrice.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
-  dataChecking(object);
 
-  adAvatar.src = object.author.avatar;
-  adType.textContent = typeCategory[object.offer.type.toUpperCase()];
-  adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
-  adTextTime.textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+  if(object.offer.price === undefined) {
+    adTextPrice.classList.add('hidden');
+  } else {
+    adTextPrice.classList.remove('hidden');
+    adTextPrice.textContent = object.offer.price;
+    adTextPrice.insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
+  }
+
+  if(object.offer.rooms === undefined || object.offer.guests === undefined) {
+    adTextCapacity.classList.add('hidden');
+  } else {
+    adTextCapacity.classList.remove('hidden');
+    adTextCapacity.textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
+  }
+
+  if(object.offer.type === undefined) {
+    adType.classList.add('hidden');
+  } else {
+    adType.classList.remove('hidden');
+    adType.textContent = typeCategory[object.offer.type.toUpperCase()];
+  }
+
+  if(object.offer.checkin === undefined || object.offer.checkout === undefined) {
+    adTextTime.classList.add('hidden');
+  } else {
+    adTextTime.classList.remove('hidden');
+    adTextTime.textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+  }
+
+  if(object.author.avatar === undefined) {
+    adAvatar.classList.add('hidden');
+  } else {
+    adAvatar.classList.remove('hidden');
+    adAvatar.src = object.author.avatar;
+  }
 
   if(object.offer.features === undefined) {
     ad.querySelector('.popup__features').classList.add('hidden');
   } else {
     ad.querySelector('.popup__features').classList.remove('hidden');
     const modifiers = object.offer.features.map((feature) => `popup__feature--${feature}`);
-    ad.querySelectorAll('.popup__feature').forEach((el) => {
-      const modifier = el.classList[1];
+    ad.querySelectorAll('.popup__feature').forEach((element) => {
+      const modifier = element.classList[1];
       if(!modifiers.includes(modifier)) {
-        el.remove();
+        element.remove();
       }
     });
   }
@@ -54,10 +80,10 @@ const createAdElement = (object) => {
     adPhotosList.classList.add('hidden');
   } else {
     adPhotosList.classList.remove('hidden');
-    object.offer.photos.forEach((el) => {
+    object.offer.photos.forEach((photo) => {
       adPhotosList.textContent = '';
       const adPhoto = document.createElement('img');
-      adPhoto.src = el;
+      adPhoto.src = photo;
       adPhoto.classList.add('popup__photo');
       adPhoto.width = '45';
       adPhoto.height = '40';
@@ -71,14 +97,4 @@ const createAdElement = (object) => {
   return ad;
 };
 
-const createAdsFragment = (objects) => {
-  const fragment = document.createDocumentFragment();
-
-  objects.forEach(() => {
-    fragment.appendChild(createAdElement(createObject()));
-  });
-
-  return fragment;
-};
-
-export {createAdElement, createAdsFragment};
+export {createAdElement};
