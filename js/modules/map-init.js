@@ -102,8 +102,8 @@ const mapInit = () => {
       removeLayers();
       renderPins(advertisments
         .slice()
-        .slice(0, SIMILAR_AD_COUNT)
-        .filter((ad) => (filterType(ad) && filterRooms(ad) && filterGuests(ad) && filterPrice(ad) && filterFeatures(ad))));
+        .filter((ad) => (filterType(ad) && filterRooms(ad) && filterGuests(ad) && filterPrice(ad) && filterFeatures(ad)))
+        .slice(0, SIMILAR_AD_COUNT));
     });
   },
   () => {
