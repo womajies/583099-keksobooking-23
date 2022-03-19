@@ -114,20 +114,23 @@ const mapInit = () => {
 
   let advertisments = [];
 
-  getData((objects) => {
-    advertisments = objects;
-    renderPins(advertisments.slice(0, SIMILAR_AD_COUNT));
-    enabledFilter();
-    mapFilterChangeHandler(() => {
-      renderPins(advertisments
-        .slice()
-        .filter((ad) => (filterType(ad) && filterRooms(ad) && filterGuests(ad) && filterPrice(ad) && filterFeatures(ad)))
-        .slice(0, SIMILAR_AD_COUNT));
+  const createPins = () => {
+    getData((objects) => {
+      advertisments = objects;
+      renderPins(advertisments.slice(0, SIMILAR_AD_COUNT));
+      enabledFilter();
+      mapFilterChangeHandler(() => {
+        renderPins(advertisments
+          .slice()
+          .filter((ad) => (filterType(ad) && filterRooms(ad) && filterGuests(ad) && filterPrice(ad) && filterFeatures(ad)))
+          .slice(0, SIMILAR_AD_COUNT));
+      });
+    },
+    () => {
+      showAlert('Не удалось получить данные. Попробуйте позже');
     });
-  },
-  () => {
-    showAlert('Не удалось получить данные. Попробуйте позже');
-  });
+  };
+  createPins();
 
   resetButton.addEventListener('click', () => {
     mainPinMarker.setLatLng({
@@ -142,7 +145,8 @@ const mapInit = () => {
 
     resetForm.reset();
     mapFilter.reset();
-    renderPins(advertisments);
+    createPins();
+    map.closePopup();
   });
 
   resetForm.addEventListener('submit', () => {
@@ -156,7 +160,8 @@ const mapInit = () => {
       lng: 139.69200,
     }, 14);
 
-    renderPins(advertisments);
+    createPins();
+    map.closePopup();
   });
 };
 
