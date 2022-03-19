@@ -1,38 +1,39 @@
 import {createAdElement} from './similar-ads.js';
 import {enabledForm, enabledFilter, setAdFormSubmit} from '../modules/form.js';
 import {getData} from '../modules/api.js';
-import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures, mapFilterChangeHandler} from '../modules/filter-map.js';
-import {getType} from '../utils/get-selects.js';
-import {formSuccessMsg} from '../utils/success-msg.js';
+import {debounce} from '../utils/debounce.js';
+import {showSuccessMsg} from '../utils/success-msg.js';
 import {showAlert} from '../utils/show-alert.js';
 
 const mapInit = () => {
-  const VIEW_SCALE = 14;
+  const ANY = 'any';
   const SIMILAR_AD_COUNT = 10;
-  const DEFAULT_ADRESS_VALUE = 'x: 35.68171, y: 139.75389';
-  // const DEFAULT_COORDINATES = {
-  //   lat: 35.68171,
-  //   lng: 139.75389,
-  // };
 
+  const housingPrice = {
+    low: {start: 0, end: 10000},
+    middle: {start: 10000, end: 50000},
+    high: {start: 50000, end: 1000000},
+  };
   const resetButton = document.querySelector('.ad-form__reset');
   const resetForm = document.querySelector('.ad-form');
   const mapFilter = document.querySelector('.map__filters');
   const address = document.querySelector('#address');
-  const adFormPrice = document.querySelector('#price');
-  const adFormType = document.querySelector('#type');
+  const housingTypeSelect = mapFilter.querySelector('#housing-type');
+  const housingPriceSelect = mapFilter.querySelector('#housing-price');
+  const housingRoomsSelect = mapFilter.querySelector('#housing-rooms');
+  const housingGuestsSelect = mapFilter.querySelector('#housing-guests');
 
   const map = L
     .map('map-canvas')
     .on('load', () => {
-      address.value = DEFAULT_ADRESS_VALUE;
+      address.value = 'x: 35.68950, y: 139.69200';
       enabledForm();
-      setAdFormSubmit(formSuccessMsg);
+      setAdFormSubmit(showSuccessMsg);
     })
     .setView({
-      lat: 35.68171,
-      lng: 139.75389,
-    }, VIEW_SCALE);
+      lat: 35.68950,
+      lng: 139.69200,
+    }, 14);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -49,8 +50,8 @@ const mapInit = () => {
 
   const mainPinMarker = L.marker(
     {
-      lat: 35.68171,
-      lng: 139.75389,
+      lat: 35.68950,
+      lng: 139.69200,
     },
     {
       draggable: true,
@@ -72,12 +73,12 @@ const mapInit = () => {
     iconAnchor: [20, 40],
   });
 
-  const removeLayers = () => markerGroup.clearLayers();
+  const removeLayer = () => markerGroup.clearLayers();
 
   const renderPins = (array) => {
-    array.forEach((element) => {
-      const lat = element.location.lat;
-      const lng = element.location.lng;
+    array.forEach((elem) => {
+      const lat = elem.location.lat;
+      const lng = elem.location.lng;
       const newMarker = L.marker({
         lat: lat,
         lng: lng,
@@ -88,8 +89,27 @@ const mapInit = () => {
       });
       newMarker
         .addTo(markerGroup)
-        .bindPopup(createAdElement(element));
+        .bindPopup(createAdElement(elem));
     });
+  };
+
+  const filterType = (ad) => housingTypeSelect.value === ANY || ad.offer.type === housingTypeSelect.value;
+  const filterPrice = (ad) => housingPriceSelect.value === ANY || (ad.offer.price >= housingPrice[housingPriceSelect.value].start && ad.offer.price <= housingPrice[housingPriceSelect.value].end);
+  const filterRooms = (ad) => housingRoomsSelect.value === ANY || ad.offer.rooms === Number(housingRoomsSelect.value);
+  const filterGuests = (ad) => housingGuestsSelect.value === ANY || ad.offer.guests === Number(housingGuestsSelect.value);
+
+  const filterFeatures = (ad) => {
+    const checkedFeatures = mapFilter.querySelectorAll('input[name="features"]:checked');
+    if (ad.offer.features) {
+      return Array.from(checkedFeatures).every((feature) => ad.offer.features.includes(feature.value));
+    }
+  };
+
+  const mapFilterChangeHandler = (cb) => {
+    mapFilter.addEventListener('change', debounce(() => {
+      removeLayer();
+      cb();
+    }, 500));
   };
 
   let advertisments = [];
@@ -114,14 +134,14 @@ const mapInit = () => {
 
   resetButton.addEventListener('click', () => {
     mainPinMarker.setLatLng({
-      lat: 35.68171,
-      lng: 139.75389,
+      lat: 35.68950,
+      lng: 139.69200,
     });
 
     map.setView({
-      lat: 35.68171,
-      lng: 139.75389,
-    }, VIEW_SCALE);
+      lat: 35.68950,
+      lng: 139.69200,
+    }, 14);
 
     resetForm.reset();
     mapFilter.reset();
@@ -131,14 +151,14 @@ const mapInit = () => {
 
   resetForm.addEventListener('submit', () => {
     mainPinMarker.setLatLng({
-      lat: 35.68171,
-      lng: 139.75389,
+      lat: 35.68950,
+      lng: 139.69200,
     });
 
     map.setView({
-      lat: 35.68171,
-      lng: 139.75389,
-    }, VIEW_SCALE);
+      lat: 35.68950,
+      lng: 139.69200,
+    }, 14);
 
     createPins();
     map.closePopup();
