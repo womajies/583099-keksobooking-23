@@ -2,7 +2,7 @@ import {createAdElement} from './similar-ads.js';
 import {enabledForm, enabledFilter, setAdFormSubmit} from '../modules/form.js';
 import {getData} from '../modules/api.js';
 import {filterType, filterPrice, filterRooms, filterGuests, filterFeatures, mapFilterChangeHandler} from '../modules/filter-map.js';
-import {getType} from '../utils/get-selects.js';
+// import {getType} from '../utils/get-selects.js';
 import {formSuccessMsg} from '../utils/success-msg.js';
 import {showAlert} from '../utils/show-alert.js';
 
@@ -19,8 +19,8 @@ const mapInit = () => {
   const resetForm = document.querySelector('.ad-form');
   const mapFilter = document.querySelector('.map__filters');
   const address = document.querySelector('#address');
-  const adFormPrice = document.querySelector('#price');
-  const adFormType = document.querySelector('#type');
+  // const adFormPrice = document.querySelector('#price');
+  // const adFormType = document.querySelector('#type');
 
   const map = L
     .map('map-canvas')
